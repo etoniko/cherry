@@ -166,7 +166,7 @@ header .menu {
 @media (max-width: 1000px) {
   .thumbnail {
     position: absolute;
-    bottom: 100px;
+    bottom: 10px;
     z-index: 11;
     display: flex;
     gap: 10px;
