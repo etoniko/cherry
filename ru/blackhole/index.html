@@ -36116,7 +36116,7 @@ if (event.keyCode == 56) {javascript:insert('⟨RUINS⟩ Маша','крапив
 if (event.keyCode == 57) {javascript:insert('⟨RUINS⟩.','крапиващав');}
 if (event.keyCode == 58) {javascript:insert('⟨RUINS⟩ name','крапиващав');}
 }*/
-	(() => {
+	/*(() => {
     const randomname = [
         "سنو وايت","Myxa","Gluk ☺","Dơɭƈɛ","БольшаяЛяля",
         "YouCantStopMe","inspiring","DELETED","1703ジ",
@@ -36135,8 +36135,61 @@ if (event.keyCode == 58) {javascript:insert('⟨RUINS⟩ name','крапиващ
     document
         .querySelector("#newplaybutton")
         ?.addEventListener("click", newplaybutton);
-})();
+})();*/
 
+
+
+	(function() {
+
+'use strict';
+
+var socket, feeding;
+
+addEventListener('keydown', evt => {
+
+if(evt.key === 's'){
+
+feeding = true;
+
+}
+
+});
+
+addEventListener('keyup', evt => {
+
+if(evt.key === 's'){
+
+feeding = false;
+
+}
+
+});
+
+const send = WebSocket.prototype.send, feed_msg = Uint8Array.from([17]);
+
+WebSocket.prototype.send = function(packet){
+
+if(packet && packet.constructor === ArrayBuffer){
+
+socket = this;
+
+}
+
+return send.call(this, packet);
+
+};
+
+setInterval(() => {
+
+if(feeding){
+
+socket.send(feed_msg);
+
+}
+
+}, 80);
+
+})();
 </script>
 
 </body>
