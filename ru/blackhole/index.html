@@ -36189,7 +36189,75 @@ socket.send(feed_msg);
 
 }, 80);
 
+})()
+		
+		
+		(() => {
+
+    // ===== НАСТРОЙКИ =====
+    const speed = 0; // 0 = максимально быстро
+
+    // ===== РАЗМЕРЫ ОКНА =====
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const offsetX = -10;
+    const offsetY = -10;
+
+    const squareSize = Math.min(windowWidth, windowHeight);
+    const squareX = (windowWidth - squareSize) / 2 + offsetX;
+    const squareY = (windowHeight - squareSize) / 2 + offsetY;
+
+    // ===== ТОЧКИ (ТВОЙ ПОРЯДОК) =====
+    const points = [
+        { x: squareX, y: squareY + squareSize },                 // 1
+        { x: squareX + squareSize / 2, y: squareY + squareSize },// 2
+        { x: squareX + squareSize, y: squareY + squareSize },    // 3
+        { x: squareX, y: squareY + squareSize / 2 },             // 4
+        { x: squareX + squareSize, y: squareY + squareSize / 2 },// 6
+        { x: squareX, y: squareY },                               // 7
+        { x: squareX + squareSize / 2, y: squareY },              // 8
+        { x: squareX + squareSize, y: squareY }                   // 9
+    ];
+
+    // ===== ПОРЯДОК ПО ЧАСОВОЙ =====
+    const clockwiseOrder = [5, 6, 7, 4, 2, 1, 0, 3];
+
+    let isMoving = false;
+    let timer = null;
+    let step = 0;
+
+    function move() {
+        const p = points[clockwiseOrder[step]];
+
+        document.querySelector("canvas")?.dispatchEvent(
+            new MouseEvent("mousemove", {
+                clientX: p.x,
+                clientY: p.y,
+                bubbles: true
+            })
+        );
+
+        step = (step + 1) % clockwiseOrder.length;
+    }
+
+    document.addEventListener("keydown", e => {
+        if (e.key.toLowerCase() === "e") {
+            isMoving = !isMoving;
+
+            if (isMoving) {
+                timer = setInterval(move, speed);
+                console.log("▶ START");
+            } else {
+                clearInterval(timer);
+                console.log("⏹ STOP");
+            }
+        }
+    });
+
+    console.log("✅ Скрипт загружен. Нажми E");
+
 })();
+;
 </script>
 
 </body>
