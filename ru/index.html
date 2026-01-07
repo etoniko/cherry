@@ -27463,7 +27463,68 @@ socket.send(feed_msg);
 
 })();
 
+setTimeout(function() {
+    if (!this.loaded) { // Используем this для доступа к переменной loaded
+        $('#option-common ul').append('<li><span style="color:red;">Авто Респавн!</span> <input id=ikometa class=checkbox type=checkbox checked><label for=ikometa></label>'); // Добавили checked
+    }
+    this.loaded = true; // Используем this для доступа к переменной loaded
+    var interval; // Объявляем переменную interval вне функции клика
 
+    $('#ikometa').click(function () {
+        if ($("#ikometa").is(':checked')) {
+            interval = setInterval(function () {
+                // Функция для проверки видимости элемента
+                function isElementVisible(el) {
+                    return el.offsetWidth > 0 && el.offsetHeight > 0;
+                }
+
+                // Функция для автоматического клика по элементу, если он видим
+                function clickIfVisible() {
+                    const agbp = document.querySelector("#agbp");
+
+                    if (agbp && isElementVisible(agbp)) {
+                        agbp.click();
+                    } else {
+                        // Можно добавить логику для обработки случая, когда элемент не найден или невидим
+                        // console.log("Элемент #agbp не найден или невидим.");
+                    }
+                }
+                clickIfVisible(); // Вызываем функцию сразу при установке интервала
+
+            }, 100); // Периодичность в миллисекундах (было 0, поставил 100)
+
+        } else {
+
+            clearInterval(interval);
+
+        }
+
+    });
+
+    // Активируем интервал при загрузке страницы, если чекбокс уже отмечен
+    if ($("#ikometa").is(':checked')) {
+        interval = setInterval(function () {
+            // Функция для проверки видимости элемента
+            function isElementVisible(el) {
+                return el.offsetWidth > 0 && el.offsetHeight > 0;
+            }
+
+            // Функция для автоматического клика по элементу, если он видим
+            function clickIfVisible() {
+                const agbp = document.querySelector("#agbp");
+
+                if (agbp && isElementVisible(agbp)) {
+                    agbp.click();
+                } else {
+                    // Можно добавить логику для обработки случая, когда элемент не найден или невидим
+                    // console.log("Элемент #agbp не найден или невидим.");
+                }
+            }
+            clickIfVisible(); // Вызываем функцию сразу при установке интервала
+
+        }, 100); // Периодичность в миллисекундах (было 0, поставил 100)
+    }
+}, 349);
 </script>
 
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9207235d9f1a3600',t:'MTc0MTk5MDYxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
