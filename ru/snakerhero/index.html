@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
 
-<title>Чашка Петри - Лучше чем Агарио. Играть в Petri Dish - больше чем агар ио.</title>
+<title>snakerhero2</title>
 <meta name="description" content="Чашка Петри- Русский Агарио. Бесплатная онлайн игра в которую ежедневно играют 200 тысяч человек. Чат, скины, кланы и куча новых режимов. Играть в agar io Чашку Петри.">
       <meta property="og:url" content="http://petridish.pw" />
         <meta property="og:image" content="http://petridish.pw/petri.jpg" />
@@ -11445,22 +11445,15 @@ window.updatePlayerBotPerServerAUED = (() => {
 					let influence = 0;
 
 					switch (other.cellType) {
-						case cellTypes.player:
-							if (canEat(cell.nSize, other.nSize)) {
-								influence = logInfluence;
-								if (canSplit(cell.nSize, other.nSize, dSplit)) {
-									if (!targetPrey || other.nSize > targetPrey.nSize) targetPrey = other;
-								}
-							} else {
-								splitKill = false;
-								influence = canEat(other.nSize, cell.nSize) ? -logInfluence * ids.length : 0;
-							}
-							break;
+case cellTypes.player:
+	influence = -9999;
+	splitKill = false;
+	break;
 						case cellTypes.virus:
 							//influence = -3 * ids.length;
 							break;
 						case cellTypes.mother:
-							influence = -10 * ids.length;
+							influence = -100 * ids.length;
 							break;
 						case cellTypes.ejected:
 							influence = 5;
@@ -32455,3 +32448,4 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
