@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
 
-<title>snakerhero13</title>
+<title>snakerhero14</title>
 <meta name="description" content="Чашка Петри- Русский Агарио. Бесплатная онлайн игра в которую ежедневно играют 200 тысяч человек. Чат, скины, кланы и куча новых режимов. Играть в agar io Чашку Петри.">
       <meta property="og:url" content="http://petridish.pw" />
         <meta property="og:image" content="http://petridish.pw/petri.jpg" />
@@ -11331,201 +11331,202 @@ if (dif > 0) {
 
 
 window.updatePlayerBotPerServerAUED = (() => {
-			window.activeBotPlayer = false;
+    window.activeBotPlayer = false;
 
-			setTimeout(() => {
-				console.clear();
-			}, 3000);
+    setTimeout(() => {
+        console.clear();
+    }, 3000);
 
-			let moveRandomPauseTicks = 0;
-			let splitPauseTicks = 0;
-			let target = null;
+    let moveRandomPauseTicks = 0;
+    let splitPauseTicks = 0;
+    let target = null;
 
-			return () => {
-				if (!window.activeBotPlayer) return;
+    return () => {
+        if (!window.activeBotPlayer) return;
 
-				const prepareMouseData = (x, y) => ({
-					x: (x - width / 2) / ratio + offsetX,
-					y: (y - height / 2) / ratio + offsetY
-				});
-				const sendMouseMove = (x, y) => {
-					if (recievedgamemode !== 117) {
-						const buffer = createBuffer(21);
-						buffer.setUint8(0, 16);
-						buffer.setFloat64(1, x, true);
-						buffer.setFloat64(9, y, true);
-						buffer.setUint32(17, 0, true);
-						socketWrite(buffer);
-					}
-					else {
-						const buffer = createBuffer(9);
-						buffer.setUint8(0, 14);
-						buffer.setFloat64(1, Math.atan2((x - offsetX) * ratio, (y - offsetY) * ratio), true);
-						socketWrite(buffer);
-					}
+        const prepareMouseData = (x, y) => ({
+            x: (x - width / 2) / ratio + offsetX,
+            y: (y - height / 2) / ratio + offsetY
+        });
 
-				};
-				const sendSplitPlayer = () => {
-					sendPacket(17);
-				};
-				const getLargestOwnedCell = () => {
-					let cell;
-					for (let i = 0; i < ids.length; i++) {
-						if (!cell || blobs[ids[i]].nSize > cell.nSize) {
-							cell = blobs[ids[i]];
-						}
-					}
-					return cell;
-				};
-				const isOwnedCellId = id => {
-					for (let i = 0; i < ids.length; i++) {
-						if (ids[i] === id) return true;
-					}
-					return false;
-				};
-				const ownedCellsToObj = () => {
-					const obj = {};
-					for (let i = 0; i < ids.length; i++) {
-						obj[ids[i]] = blobs[ids[i]];
-					}
-					return obj;
-				};
+        const sendMouseMove = (x, y) => {
+            if (recievedgamemode !== 117) {
+                const buffer = createBuffer(21);
+                buffer.setUint8(0, 16);
+                buffer.setFloat64(1, x, true);
+                buffer.setFloat64(9, y, true);
+                buffer.setUint32(17, 0, true);
+                socketWrite(buffer);
+            } else {
+                const buffer = createBuffer(9);
+                buffer.setUint8(0, 14);
+                buffer.setFloat64(1, Math.atan2((x - offsetX) * ratio, (y - offsetY) * ratio), true);
+                socketWrite(buffer);
+            }
+        };
 
-				const cellTypes = {
-					player: 0,
-					virus: 2,
-					mother: 2,
-					ejected: 3,
-					food: 1,
-					map: 99
-				};
+        const sendSplitPlayer = () => {
+            sendPacket(17);
+        };
 
-				const EAT_MULT = 1.15;
-				const EAT_OVERLAP = 0.4;
-				const PLAYER_SPLIT_BOOST = 680;
+        const getLargestOwnedCell = () => {
+            let cell;
+            for (let i = 0; i < ids.length; i++) {
+                if (!cell || blobs[ids[i]].nSize > cell.nSize) {
+                    cell = blobs[ids[i]];
+                }
+            }
+            return cell;
+        };
 
-				const canEat = (r1, r2) => r1 > r2 * EAT_MULT;
-				const canSplit = (r1, r2, d) =>
-					r1 * Math.SQRT1_2 > r2 * EAT_MULT &&
-					d - Math.max(r1 * Math.SQRT1_2, PLAYER_SPLIT_BOOST) <= r1 - r2 * EAT_OVERLAP;
+        const isOwnedCellId = id => {
+            for (let i = 0; i < ids.length; i++) {
+                if (ids[i] === id) return true;
+            }
+            return false;
+        };
 
-				if (moveRandomPauseTicks) moveRandomPauseTicks--;
-				if (splitPauseTicks) splitPauseTicks--;
-				else target = null;
+        const ownedCellsToObj = () => {
+            const obj = {};
+            for (let i = 0; i < ids.length; i++) {
+                obj[ids[i]] = blobs[ids[i]];
+            }
+            return obj;
+        };
 
-				const cell = getLargestOwnedCell();
-				if (!cell) return; // ( ids.length === 0 )
+        const cellTypes = {
+            player: 0,
+            virus: 2,
+            mother: 2,
+            ejected: 3,
+            food: 1,
+            map: 99
+        };
 
-				if (target) {
-					if (!target.destroyed && canEat(cell.nSize, target.nSize)) {
-						sendMouseMove(target.nx, target.ny);
-						return;
-					}
-					else target = null;
-				}
+        const EAT_MULT = 1.15;
+        const EAT_OVERLAP = 0.4;
+        const PLAYER_SPLIT_BOOST = 680;
 
-				const ownedCellsIds = ownedCellsToObj();
+        const canEat = (r1, r2) => r1 > r2 * EAT_MULT;
+        const canSplit = (r1, r2, d) =>
+            r1 * Math.SQRT1_2 > r2 * EAT_MULT &&
+            d - Math.max(r1 * Math.SQRT1_2, PLAYER_SPLIT_BOOST) <= r1 - r2 * EAT_OVERLAP;
 
-				let moveX = 0, moveY = 0;
-				let targetPrey;
-				let splitKill = ids.length <= 2 && !splitPauseTicks;
+        if (moveRandomPauseTicks) moveRandomPauseTicks--;
+        if (splitPauseTicks) splitPauseTicks--;
+        else target = null;
 
-				const logInfluence = Math.log10(cell.nSize * cell.nSize);
+        const cell = getLargestOwnedCell();
+        if (!cell) return; // ( ids.length === 0 )
 
-for (let i = 0; i < list.length; i++) {
-    const other = list[i];
+        if (target) {
+            if (!target.destroyed && canEat(cell.nSize, target.nSize)) {
+                sendMouseMove(target.nx, target.ny);
+                return;
+            }
+            else target = null;
+        }
 
-    if (ownedCellsIds[other.id]) continue;
+        const ownedCellsIds = ownedCellsToObj();
 
-    const dx = other.nx - cell.nx;
-    const dy = other.ny - cell.ny;
+        let moveX = 0, moveY = 0;
+        let targetPrey;
+        let splitKill = ids.length <= 2 && !splitPauseTicks;
 
-    const dSplit = (dx * dx + dy * dy) ** .5 + 1;
-    const d = dSplit - cell.nSize - other.nSize + 1;
+        const logInfluence = Math.log10(cell.nSize * cell.nSize);
 
-    let influence = 0;
+        for (let i = 0; i < list.length; i++) {
+            const other = list[i];
 
-    // Игнорировать еду, если она за пределами радиуса
-    if (other.cellType === cellTypes.food) {
-        const distToFood = Math.sqrt(dx * dx + dy * dy);
-        if (distToFood > FARM_RADIUS) continue; // Игнорировать еду, если она вне радиуса
-    }
+            if (ownedCellsIds[other.id]) continue;
 
-    switch (other.cellType) {
-        case cellTypes.player:
-            influence = -9999;
-            splitKill = false;
-            break;
-        case cellTypes.virus:
-            //influence = -3 * ids.length;
-            break;
-        case cellTypes.mother:
-            influence = -10 * ids.length;
-            break;
-        case cellTypes.ejected:
-            influence = 5;
-            break;
-        case cellTypes.food:
-            influence = 100;
-            break;
-    }
+            const dx = other.nx - cell.nx;
+            const dy = other.ny - cell.ny;
 
-    // SIMPLE MAP WALL AVOIDANCE
-    if (cell.nx < minX + 800 || cell.nx > maxX - 800 || cell.ny < minY + 800 || cell.ny > maxY - 800) {
-        influence = -99999; // очень сильный отталкивающий эффект
-    }
+            const dSplit = (dx * dx + dy * dy) ** .5 + 1;
+            const d = dSplit - cell.nSize - other.nSize + 1;
 
-    if (influence) {
-        moveX += (dx / d) * influence / d;
-        moveY += (dy / d) * influence / d;
-    }
-}
+            let influence = 0;
 
+            switch (other.cellType) {
+                case cellTypes.player:
+                    influence = -9999;
+                    splitKill = false;
+                    break;
+                case cellTypes.virus:
+                    break;
+                case cellTypes.mother:
+                    influence = -10 * ids.length;
+                    break;
+                case cellTypes.ejected:
+                    influence = 5;
+                    break;
+                case cellTypes.food:
+                    // Добавляем проверку на радиус фермы
+                    const distanceToFood = Math.sqrt(dx * dx + dy * dy);
+                    if (distanceToFood > FARM_RADIUS) {
+                        influence = 0; // Игнорируем еду, если она за радиусом
+                    } else {
+                        influence = 100; // Влияем на еду, если она в пределах радиуса
+                    }
+                    break;
+            }
 
-				let splitPlayer = false;
+            // SIMPLE MAP WALL AVOIDANCE
+            if (cell.nx < minX + 800 || cell.nx > maxX - 800 || cell.ny < minY + 800 || cell.ny > maxY - 800) {
+                influence = -99999; // очень сильный отталкивающий эффект
+            }
 
-				if (
-					splitKill &&
-					targetPrey && targetPrey.nSize * 2 > cell.nSize
-				) {
-					target = targetPrey;
-					moveX = targetPrey.nx;
-					moveY = targetPrey.ny;
-					splitPlayer = true;
-					splitPauseTicks = 50;
-				}
-				else if (moveX === 0 && moveY === 0) { // clean area view
-					if (!moveRandomPauseTicks) {
-						moveX = Math.random() * ~~((minX + maxX) / 2);
-						moveY = Math.random() * ~~((minY + maxY) / 2);
-						moveRandomPauseTicks = 500;
-					}
-				}
-				else {
-					const d = (moveX * moveX + moveY * moveY) ** .5 + 1;
-					moveX = cell.nx + moveX / d * (~~((minX + maxX) / 2) / 4);
-					moveY = cell.ny + moveY / d * (~~((minX + maxX) / 2) / 4);
-				}
+            if (influence) {
+                moveX += (dx / d) * influence / d;
+                moveY += (dy / d) * influence / d;
+            }
+        }
 
-// Расчёт центра карты
-const centerX = (minX + maxX) / 2;
-const centerY = (minY + maxY) / 2;
+        let splitPlayer = false;
 
-const dx = cell.nx - centerX;
-const dy = cell.ny - centerY;
-const distToCenter = Math.sqrt(dx*dx + dy*dy);
-const FARM_RADIUS = 12500;
+        if (
+            splitKill &&
+            targetPrey && targetPrey.nSize * 2 > cell.nSize
+        ) {
+            target = targetPrey;
+            moveX = targetPrey.nx;
+            moveY = targetPrey.ny;
+            splitPlayer = true;
+            splitPauseTicks = 50;
+        }
+        else if (moveX === 0 && moveY === 0) { // clean area view
+            if (!moveRandomPauseTicks) {
+                moveX = Math.random() * ~~((minX + maxX) / 2);
+                moveY = Math.random() * ~~((minY + maxY) / 2);
+                moveRandomPauseTicks = 500;
+            }
+        }
+        else {
+            const d = (moveX * moveX + moveY * moveY) ** .5 + 1;
+            moveX = cell.nx + moveX / d * (~~((minX + maxX) / 2) / 4);
+            moveY = cell.ny + moveY / d * (~~((minX + maxX) / 2) / 4);
+        }
 
-// Приоритет №1: двигаться к центру карты, если мы вне радиуса 1000
-if (distToCenter > FARM_RADIUS) {
-    moveX = centerX;
-    moveY = centerY;
-}
-				
-				sendMouseMove(moveX, moveY);
-				if (splitPlayer) sendSplitPlayer();
-			};
-		})();
+        // Расчёт центра карты
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+
+        const dx = cell.nx - centerX;
+        const dy = cell.ny - centerY;
+        const distToCenter = Math.sqrt(dx * dx + dy * dy);
+        const FARM_RADIUS = 12500;
+
+        // Приоритет №1: двигаться к центру карты, если мы вне радиуса 1000
+        if (distToCenter > FARM_RADIUS) {
+            moveX = centerX;
+            moveY = centerY;
+        }
+
+        sendMouseMove(moveX, moveY);
+        if (splitPlayer) sendSplitPlayer();
+    };
+})();
 
 
 
@@ -32476,6 +32477,7 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
 
