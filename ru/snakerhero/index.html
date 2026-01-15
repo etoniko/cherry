@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
 
-<title>snakerhero2</title>
+<title>snakerhero3</title>
 <meta name="description" content="Чашка Петри- Русский Агарио. Бесплатная онлайн игра в которую ежедневно играют 200 тысяч человек. Чат, скины, кланы и куча новых режимов. Играть в agar io Чашку Петри.">
       <meta property="og:url" content="http://petridish.pw" />
         <meta property="og:image" content="http://petridish.pw/petri.jpg" />
@@ -11396,7 +11396,8 @@ window.updatePlayerBotPerServerAUED = (() => {
 					virus: 2,
 					mother: 2,
 					ejected: 3,
-					food: 1
+					food: 1,
+					map: 99
 				};
 
 				const EAT_MULT = 1.15;
@@ -11462,6 +11463,11 @@ case cellTypes.player:
 							influence = 5;
 							break;
 					}
+
+					// SIMPLE MAP WALL AVOIDANCE
+if (cell.nx < minX + 800 || cell.nx > maxX - 800 || cell.ny < minY + 800 || cell.ny > maxY - 800) {
+    influence = -99999; // очень сильный отталкивающий эффект
+}
 
 					if (influence) {
 						moveX += (dx / d) * influence / d;
@@ -32448,5 +32454,6 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
