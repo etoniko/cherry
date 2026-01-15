@@ -11507,7 +11507,7 @@ const centerY = (minY + maxY) / 2;
 const dx = cell.nx - centerX;
 const dy = cell.ny - centerY;
 const distToCenter = Math.sqrt(dx*dx + dy*dy);
-const FARM_RADIUS = 20000;
+const FARM_RADIUS = 15000;
 
 // Приоритет №1: двигаться к центру карты, если мы вне радиуса 1000
 if (distToCenter > FARM_RADIUS) {
@@ -32469,6 +32469,7 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
 
