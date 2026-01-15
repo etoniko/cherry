@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
 
-<title>snakerhero4</title>
+<title>snakerhero5</title>
 <meta name="description" content="Чашка Петри- Русский Агарио. Бесплатная онлайн игра в которую ежедневно играют 200 тысяч человек. Чат, скины, кланы и куча новых режимов. Играть в agar io Чашку Петри.">
       <meta property="og:url" content="http://petridish.pw" />
         <meta property="og:image" content="http://petridish.pw/petri.jpg" />
@@ -11332,7 +11332,9 @@ if (dif > 0) {
 
 window.updatePlayerBotPerServerAUED = (() => {
 			window.activeBotPlayer = false;
-
+    const CENTER_X = (minX + maxX) / 2;
+    const CENTER_Y = (minY + maxY) / 2;
+    const MAX_RADIUS = 1000; // допустимый радиус от центра
 			setTimeout(() => {
 				console.clear();
 			}, 3000);
@@ -11499,7 +11501,15 @@ if (cell.nx < minX + 800 || cell.nx > maxX - 800 || cell.ny < minY + 800 || cell
 					moveX = cell.nx + moveX / d * (~~((minX + maxX) / 2) / 4);
 					moveY = cell.ny + moveY / d * (~~((minX + maxX) / 2) / 4);
 				}
+const dx = moveX - CENTER_X;
+const dy = moveY - CENTER_Y;
+const dist = Math.sqrt(dx * dx + dy * dy);
 
+if (dist > MAX_RADIUS) {
+    const scale = MAX_RADIUS / dist;
+    moveX = CENTER_X + dx * scale;
+    moveY = CENTER_Y + dy * scale;
+}
 				sendMouseMove(moveX, moveY);
 				if (splitPlayer) sendSplitPlayer();
 			};
@@ -32454,6 +32464,7 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
 
