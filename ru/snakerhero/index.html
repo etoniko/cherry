@@ -7325,78 +7325,28 @@ isShowMass = false;
      * @param {Event} event
      * @return {undefined}
      */
-    function onDocumentMouseScroll(event) {
-	
-		//	var bb = event.wheelDelta / -120 || (event.detail || 0);
-		//console.log('hello1', event.wheelDelta);
-		//console.log('hello2', event.detail);
-		//console.log('hello3', event);
-		//console.log(event.pageY);
-		//event.pageY = 0;
-		//event.preventDefault();
-		//event.stopPropagation();
-		if ((!hasOverlay) && (!ingamelistopen) && (!adminopen) && (!overchat) ) {
+   		function onDocumentMouseScroll(event) {
+			if (!hasOverlay && !ingamelistopen && !adminopen && !overchat) {
+				zoom *= Math.pow(0.9, event.wheelDelta / -120 || (event.detail || 0));
 
-			zoom *= Math.pow(0.9, event.wheelDelta / -120 || (event.detail || 0));
+				// Минимальный и максимальный зум
+				const minZoom = isSpectating ? 0.03 : 0.01;
+				const maxZoom = isSpectating ? 3 / ratio : 4 / ratio;
 
-        	if (!isSpectating) {
-				if (recievedgamemode == 113) {
-	            	if (0.1 > zoom) { zoom = 0.1; }
+				// Ограничиваем зум
+				if (zoom < minZoom) {
+					zoom = minZoom;
+				}
+				if (zoom > maxZoom) {
+					zoom = maxZoom;
 				}
 
-				if (recievedgamemode == 69) {
-	            	if (0.2 > zoom) { zoom = 0.2; }
+				// Предотвращаем стандартное поведение в VK
+				if (isVK === 1) {
+					event.preventDefault();
 				}
-
-				if (recievedgamemode == 111) {
-	            	if (0.4 > zoom) { zoom = 0.4; }
-				}
-
-				if (recievedgamemodeExtended == 25) {
-        	    	if (0.2 > zoom) { zoom = 0.2; }
-				}
-
-				if (recievedgamemode == 110) {
-	            	if (0.4 > zoom) { zoom = 0.4; }
-				}
-
-				if (recievedgamemode == 109) {
-	            	if (0.4 > zoom) { zoom = 0.4; }
-				}
-
-				if (recievedgamemode == 117) {
-					if (0.9 > zoom) { zoom = 0.9; }
-				}
-
-				if ((recievedgamemode != 113) && (recievedgamemode != 110) && (recievedgamemode != 117)
-					&& (recievedgamemode != 69) && (recievedgamemode != 111)
-					&& (recievedgamemode != 109) && (recievedgamemodeExtended != 25)) {
-	            		if (0.8 > zoom) { zoom = 0.8; }
-				}
-
-            	if (zoom > 4 / ratio) { zoom = 4 / ratio; }
-
-				if (isVK == 1) { event.preventDefault(); }
-       		}
-
-        	if (isSpectating) {
-            	//console.log(zoom);
-				if (!isDrawingMode) {
-					if (0.02 > zoom) {
-						zoom = 0.02;
-					}
-					if (zoom > 3 / ratio) {
-						zoom = 3 / ratio;
-					}
-					if (isVK == 1) { event.preventDefault(); }
-				}
-				else {
-					if (zoom > 15 / ratio) { zoom = 15 / ratio; }
-				}
-
 			}
 		}
-    }
     /**
      * @return {undefined}
      */
@@ -32440,6 +32390,7 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
 
