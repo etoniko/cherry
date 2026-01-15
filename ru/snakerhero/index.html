@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
 
-<title>snakerhero5</title>
+<title>snakerhero6</title>
 <meta name="description" content="Чашка Петри- Русский Агарио. Бесплатная онлайн игра в которую ежедневно играют 200 тысяч человек. Чат, скины, кланы и куча новых режимов. Играть в agar io Чашку Петри.">
       <meta property="og:url" content="http://petridish.pw" />
         <meta property="og:image" content="http://petridish.pw/petri.jpg" />
@@ -11418,6 +11418,16 @@ window.updatePlayerBotPerServerAUED = (() => {
 				const cell = getLargestOwnedCell();
 				if (!cell) return; // ( ids.length === 0 )
 
+				const dxToCenter = cell.nx - CENTER_X;
+const dyToCenter = cell.ny - CENTER_Y;
+const distToCenter = Math.sqrt(dxToCenter*dxToCenter + dyToCenter*dyToCenter);
+
+// Если бот слишком далеко — игнорируем все цели и идем к центру
+if (distToCenter > MAX_RADIUS) {
+    sendMouseMove(CENTER_X, CENTER_Y);
+    return; // выходим, не выбираем цели
+}
+
 				if (target) {
 					if (!target.destroyed && canEat(cell.nSize, target.nSize)) {
 						sendMouseMove(target.nx, target.ny);
@@ -11433,7 +11443,11 @@ window.updatePlayerBotPerServerAUED = (() => {
 				let splitKill = ids.length <= 2 && !splitPauseTicks;
 
 				const logInfluence = Math.log10(cell.nSize * cell.nSize);
-
+const safeList = list.filter(obj => {
+    const dx = obj.nx - CENTER_X;
+    const dy = obj.ny - CENTER_Y;
+    return Math.sqrt(dx*dx + dy*dy) <= MAX_RADIUS;
+});
 				for (let i = 0; i < list.length; i++) {
 					const other = list[i];
 
@@ -11490,11 +11504,14 @@ if (cell.nx < minX + 800 || cell.nx > maxX - 800 || cell.ny < minY + 800 || cell
 					splitPauseTicks = 50;
 				}
 				else if (moveX === 0 && moveY === 0) { // clean area view
-					if (!moveRandomPauseTicks) {
-						moveX = Math.random() * ~~((minX + maxX) / 2);
-						moveY = Math.random() * ~~((minY + maxY) / 2);
-						moveRandomPauseTicks = 500;
-					}
+if (!moveRandomPauseTicks) {
+    // случайная точка внутри круга радиуса MAX_RADIUS
+    const angle = Math.random() * 2 * Math.PI;
+    const radius = Math.random() * MAX_RADIUS;
+    moveX = CENTER_X + Math.cos(angle) * radius;
+    moveY = CENTER_Y + Math.sin(angle) * radius;
+    moveRandomPauseTicks = 500;
+}
 				}
 				else {
 					const d = (moveX * moveX + moveY * moveY) ** .5 + 1;
@@ -32464,6 +32481,7 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
 
