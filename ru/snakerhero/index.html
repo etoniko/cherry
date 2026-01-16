@@ -13250,7 +13250,7 @@ function connnspec(id,title) {
             ctx.globalAlpha = 0.05;
             ctx.fillRect(0, 0, width, height);
             /** @type {number} */
-            ctx.globalAlpha = 1;
+            ctx.globalAlpha = 0.5;
 
 
 
@@ -13363,7 +13363,7 @@ function connnspec(id,title) {
             //}
             ctx.stroke();
             ctx.restore();
-	            ctx.globalAlpha = 0.3;
+	            ctx.globalAlpha = 1;
 		if (ballsize > 400) {
 	            ctx.globalAlpha = 1;
 		}
@@ -13382,7 +13382,7 @@ function connnspec(id,title) {
             ctx.lineWidth = 5;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
-            ctx.globalAlpha = 0.3;
+            ctx.globalAlpha = 1;
 
             i = 0;
             for (; i < zPIUxMomLn.length; i++) {
@@ -17132,7 +17132,7 @@ imagesStickers[stickernamecache].crossOrigin = 'Anonymous';
 
 
                         /** @type {number} */
-                        ctx.globalAlpha = 1; //XXX
+                        ctx.globalAlpha = 0.5; //XXX
                         /** @type {boolean} */
                         var isPlayer = -1 != zPIUxMomLn.indexOf(this);
 
@@ -32453,6 +32453,7 @@ setTimeout(function(){
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be0c7b5c90698c9',t:'MTc2ODQzMTk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
+
 
 
 
