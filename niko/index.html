@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>График 2/2/3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 20px 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+            letter-spacing: -0.3px;
+        }
+
+        .header h1 span {
+            font-weight: 400;
+            color: #86868b;
+            font-size: 14px;
+        }
+
+        .month-nav {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: #f5f5f7;
+            border-radius: 30px;
+            padding: 2px;
+        }
+
+        .month-nav button {
+            background: none;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 13px;
+            color: #1d1d1f;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .month-nav button:hover {
+            background: #e5e5ea;
+        }
+
+        .month-nav .month-display {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .total-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 2px 12px 2px;
+            border-bottom: 1px solid #e5e5ea;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #1d1d1f;
+        }
+
+        .total-bar .total-work {
+            font-weight: 600;
+        }
+
+        .total-bar .total-work i {
+            color: #1d1d1f;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .total-bar .total-hours {
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .total-bar .total-hours i {
+            color: #86868b;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e5ea;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #1d1d1f;
+        }
+
+        .legend-item .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .legend-item .dot.work {
+            background: #1d1d1f;
+        }
+
+        .legend-item .dot.off {
+            background: #f5f5f7;
+            border: 1px solid #d2d2d7;
+        }
+
+        .legend-item .dot.today {
+            background: #d6336c;
+            border-radius: 4px;
+            width: 12px;
+            height: 12px;
+            border: none;
+        }
+
+        .legend-item i {
+            color: #86868b;
+            font-size: 11px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+            margin-bottom: 4px;
+        }
+
+        .weekday-header {
+            font-size: 11px;
+            font-weight: 600;
+            color: #86868b;
+            text-align: center;
+            padding: 4px 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1d1d1f;
+            transition: 0.1s;
+            position: relative;
+            min-height: 44px;
+        }
+
+        .day-cell.work {
+            background: #1d1d1f;
+            color: #ffffff;
+        }
+
+        .day-cell.off {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .day-cell.empty {
+            background: transparent;
+            color: transparent;
+        }
+
+        .day-cell .hours-label {
+            font-size: 8px;
+            font-weight: 500;
+            opacity: 0.6;
+            margin-top: -1px;
+        }
+
+        .day-cell.work .hours-label {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .day-cell.off .hours-label {
+            color: #b0b0b6;
+        }
+
+        /* ===== СЕГОДНЯ — ТЁМНО-РОЗОВЫЙ ===== */
+        .day-cell.today {
+            background: #d6336c !important;
+            color: #ffffff !important;
+            outline: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(214, 51, 108, 0.35);
+            z-index: 1;
+            transform: scale(1.02);
+        }
+
+        .day-cell.today .hours-label {
+            color: rgba(255,255,255,0.6) !important;
+        }
+
+        .day-cell.today.work {
+            background: #d6336c !important;
+            color: #ffffff !important;
+        }
+
+        .day-cell.today.off {
+            background: #d6336c !important;
+            color: #ffffff !important;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e5ea;
+            font-size: 11px;
+            color: #b0b0b6;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .footer i {
+            color: #b0b0b6;
+            font-size: 10px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px 6px;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+
+            .container {
+                padding: 16px 12px 14px;
+                border-radius: 16px;
+            }
+
+            .header h1 {
+                font-size: 17px;
+            }
+
+            .header h1 span {
+                font-size: 12px;
+            }
+
+            .month-nav .month-display {
+                font-size: 12px;
+                min-width: 70px;
+            }
+
+            .month-nav button {
+                width: 26px;
+                height: 26px;
+                font-size: 11px;
+            }
+
+            .day-cell {
+                font-size: 13px;
+                min-height: 36px;
+                border-radius: 8px;
+            }
+
+            .day-cell .hours-label {
+                font-size: 7px;
+            }
+
+            .weekday-header {
+                font-size: 9px;
+                padding: 2px 0 4px 0;
+            }
+
+            .legend {
+                gap: 10px;
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+
+            .legend-item {
+                font-size: 10px;
+            }
+
+            .legend-item .dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .total-bar {
+                font-size: 11px;
+                padding: 6px 2px 10px 2px;
+            }
+
+            .days-grid {
+                gap: 2px;
+            }
+
+            .footer {
+                font-size: 10px;
+                gap: 10px;
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+
+            .day-cell.today {
+                transform: scale(1.04);
+                box-shadow: 0 2px 10px rgba(214, 51, 108, 0.4);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .day-cell {
+                font-size: 11px;
+                min-height: 30px;
+                border-radius: 6px;
+            }
+
+            .day-cell .hours-label {
+                font-size: 6px;
+            }
+
+            .container {
+                padding: 12px 8px 10px;
+            }
+        }
+
+        .day-cell {
+            animation: fade 0.15s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>График <span>2/2/3</span></h1>
+        <div class="month-nav">
+            <button onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span class="month-display" id="monthDisplay">Сентябрь 2026</span>
+            <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div class="total-bar">
+        <span class="total-work"><i class="fas fa-briefcase"></i> Рабочих: <span id="workDays">0</span></span>
+        <span class="total-hours"><i class="fas fa-clock"></i> Часов: <span id="totalHours">0</span></span>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <span class="dot work"></span>
+            <i class="fas fa-briefcase"></i> Работа
+        </div>
+        <div class="legend-item">
+            <span class="dot off"></span>
+            <i class="fas fa-home"></i> Выходной
+        </div>
+        <div class="legend-item">
+            <span class="dot today"></span>
+            <i class="fas fa-calendar-day" style="color:#d6336c;"></i> Сегодня
+        </div>
+    </div>
+
+    <div class="days-grid" id="daysGrid"></div>
+
+    <div class="footer">
+        <span><i class="fas fa-arrow-right"></i> 2Р → 3В → 2Р → 2В</span>
+        <span><i class="fas fa-clock"></i> 12ч/день</span>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    //  ГРАФИК 2/2/3
+    // ============================================================
+    const CYCLE = [1, 1, 0, 0, 0, 1, 1, 0, 0];
+    const ANCHOR_DATE = new Date(2026, 8, 2);
+    const ANCHOR_INDEX = 0;
+    const HOURS_PER_WORK = 12;
+
+    function getStatus(year, month, day) {
+        const d = new Date(year, month, day);
+        const anchor = new Date(ANCHOR_DATE.getFullYear(), ANCHOR_DATE.getMonth(), ANCHOR_DATE.getDate());
+        const diff = Math.round((d - anchor) / (1000 * 60 * 60 * 24));
+        let idx = (ANCHOR_INDEX + diff) % CYCLE.length;
+        if (idx < 0) idx += CYCLE.length;
+        return CYCLE[idx];
+    }
+
+    // ============================================================
+    //  РЕНДЕР
+    // ============================================================
+    const now = new Date();
+    let currentYear = now.getFullYear();
+    let currentMonth = now.getMonth();
+
+    const today = new Date();
+    const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    const dayNamesShort = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+
+    const grid = document.getElementById('daysGrid');
+    const monthDisplay = document.getElementById('monthDisplay');
+    const workDaysSpan = document.getElementById('workDays');
+    const totalHoursSpan = document.getElementById('totalHours');
+
+    function renderMonth(year, month) {
+        grid.innerHTML = '';
+        monthDisplay.textContent = monthNames[month] + ' ' + year;
+
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDay = new Date(year, month, 1).getDay();
+        let offset = (firstDay === 0) ? 6 : firstDay - 1;
+
+        let workDays = 0;
+
+        // Заголовки дней недели
+        for (let i = 0; i < 7; i++) {
+            const header = document.createElement('div');
+            header.className = 'weekday-header';
+            header.textContent = dayNamesShort[i];
+            grid.appendChild(header);
+        }
+
+        // Пустые ячейки
+        for (let i = 0; i < offset; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'day-cell empty';
+            grid.appendChild(empty);
+        }
+
+        // Дни месяца
+        for (let d = 1; d <= daysInMonth; d++) {
+            const status = getStatus(year, month, d);
+            const isWork = (status === 1);
+            if (isWork) workDays++;
+
+            const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+            const isToday = (dateStr === todayStr);
+
+            const cell = document.createElement('div');
+            cell.className = 'day-cell';
+
+            if (isWork) {
+                cell.classList.add('work');
+                cell.innerHTML = `
+                    ${d}
+                    <span class="hours-label">${HOURS_PER_WORK}ч</span>
+                `;
+            } else {
+                cell.classList.add('off');
+                cell.innerHTML = `
+                    ${d}
+                    <span class="hours-label">—</span>
+                `;
+            }
+
+            if (isToday) {
+                cell.classList.add('today');
+            }
+
+            grid.appendChild(cell);
+        }
+
+        workDaysSpan.textContent = workDays;
+        totalHoursSpan.textContent = workDays * HOURS_PER_WORK;
+    }
+
+    // ============================================================
+    //  УПРАВЛЕНИЕ
+    // ============================================================
+    function changeMonth(delta) {
+        currentMonth += delta;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderMonth(currentYear, currentMonth);
+    }
+
+    // ============================================================
+    //  СТАРТ
+    // ============================================================
+    renderMonth(currentYear, currentMonth);
+</script>
+
+</body>
+</html>
